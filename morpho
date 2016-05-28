@@ -1,0 +1,253 @@
+emulate -LR zsh
+
+zmodload zsh/mathfunc
+
+integer width=10 height=10
+
+float CA=10.0
+float CB=23.39
+
+# Old system state
+typeset -A Ao Bo
+
+# New system state
+typeset -A An Bn
+
+# Helper variables
+integer index colidx
+float color
+float tmp1 tmp2
+
+solve_one_iteration() {
+    integer i j n i_add1 i_sub1 j_add1 j_sub1
+    float DiA ReA DiB ReB
+
+    float Aval Bval
+    float Anext_x Anext_y Aprev_x Aprev_y
+    float Bnext_x Bnext_y Bprev_x Bprev_y
+
+    for (( i=1; i<=height; i ++ )); do
+        i_add1=1+(i%height)
+        i_sub1=i-1
+        (( i_sub1 < 1 )) && i_sub1=height
+
+        for (( j=1; j<=width; j ++ )); do
+            j_add1=1+(j%width)
+            j_sub1=j-1
+            (( j_sub1 < 1 )) && j_sub1=width
+
+            # const double Aval = m_Ao[i][j], Bval = m_Bo[i][j];
+            index=i*width+j
+            Aval=${Ao[$index]}
+            Bval=${Bo[$index]}
+
+            #
+            # const double Anext_x = m_Ao[i_add1][j], Anext_y = m_Ao[i][j_add1];
+            #
+            index=i_add1*width+j
+            Anext_x=${Ao[$index]}
+            index=i*width+j_add1
+            Anext_y=${Ao[$index]}
+
+            # const double Aprev_x = m_Ao[i_sub1][j], Aprev_y = m_Ao[i][j_sub1];
+            index=i_sub1*width+j
+            Aprev_x=${Ao[$index]}
+            index=i*width+j_sub1
+            Aprev_y=${Ao[$index]}
+
+            #
+            # const double Bnext_x = m_Bo[i_add1][j], Bnext_y = m_Bo[i][j_add1];
+            #
+            index=i_add1*width+j
+            Bnext_x=${Bo[$index]}
+            index=i*width+j_add1
+            Bnext_y=${Bo[$index]}
+
+            # const double Bprev_x = m_Bo[i_sub1][j], Bprev_y = m_Bo[i][j_sub1];
+            index=i_sub1*width+j
+            Bprev_x=${Bo[$index]}
+            index=i*width+j_sub1
+            Bprev_y=${Bo[$index]}
+
+            # Substance A - its diffusion process
+            DiA=$(( CA * ( Anext_x - 2.0 * Aval + Aprev_x   +   Anext_y - 2.0 * Aval + Aprev_y ) ))
+            # ... its reaction process
+            ReA=$(( Aval * Bval - Aval - 12.0 ))
+
+            # Euler step
+            index=i*width+j
+            An[$index]=$(( Aval + 0.0105 * (ReA + DiA) ))
+
+            # Substance B - its diffusion process
+            DiB=$(( CB * ( Bnext_x - 2.0 * Bval + Bprev_x   +   Bnext_y - 2.0 * Bval + Bprev_y ) ))
+            # ... its reaction process
+            ReB=$(( 16.0 - Aval * Bval ))
+
+            # Euler step
+            Bn[$index]=$(( Bval + 0.0105 * (ReB + DiB) ))
+        done
+    done
+}
+
+solve_one_iteration_reversed() {
+    integer i j n i_add1 i_sub1 j_add1 j_sub1
+    float DiA ReA DiB ReB
+
+    float Aval Bval
+    float Anext_x Anext_y Aprev_x Aprev_y
+    float Bnext_x Bnext_y Bprev_x Bprev_y
+
+    for (( i=1; i<=height; i ++ )); do
+        i_add1=1+(i%height)
+        i_sub1=i-1
+        (( i_sub1 < 1 )) && i_sub1=height
+
+        for (( j=1; j<=width; j ++ )); do
+            j_add1=1+(j%width)
+            j_sub1=j-1
+            (( j_sub1 < 1 )) && j_sub1=width
+
+            # const double Aval = m_Ao[i][j], Bval = m_Bo[i][j];
+            index=i*width+j
+            Aval=${An[$index]}
+            Bval=${Bn[$index]}
+
+            #
+            # const double Anext_x = m_Ao[i_add1][j], Anext_y = m_Ao[i][j_add1];
+            #
+            index=i_add1*width+j
+            Anext_x=${An[$index]}
+            index=i*width+j_add1
+            Anext_y=${An[$index]}
+
+            # const double Aprev_x = m_Ao[i_sub1][j], Aprev_y = m_Ao[i][j_sub1];
+            index=i_sub1*width+j
+            Aprev_x=${An[$index]}
+            index=i*width+j_sub1
+            Aprev_y=${An[$index]}
+
+            #
+            # const double Bnext_x = m_Bo[i_add1][j], Bnext_y = m_Bo[i][j_add1];
+            #
+            index=i_add1*width+j
+            Bnext_x=${Bn[$index]}
+            index=i*width+j_add1
+            Bnext_y=${Bn[$index]}
+
+            # const double Bprev_x = m_Bo[i_sub1][j], Bprev_y = m_Bo[i][j_sub1];
+            index=i_sub1*width+j
+            Bprev_x=${Bn[$index]}
+            index=i*width+j_sub1
+            Bprev_y=${Bn[$index]}
+
+            # Substance A - its diffusion process
+            DiA=$(( CA * ( Anext_x - 2.0 * Aval + Aprev_x   +   Anext_y - 2.0 * Aval + Aprev_y ) ))
+            # ... its reaction process
+            ReA=$(( Aval * Bval - Aval - 12.0 ))
+
+            # Euler step
+            index=i*width+j
+            Ao[$index]=$(( Aval + 0.0105 * (ReA + DiA) ))
+
+            # Substance B - its diffusion process
+            DiB=$(( CB * ( Bnext_x - 2.0 * Bval + Bprev_x   +   Bnext_y - 2.0 * Bval + Bprev_y ) ))
+            # ... its reaction process
+            ReB=$(( 16.0 - Aval * Bval ))
+
+            # Euler step
+            Bo[$index]=$(( Bval + 0.0105 * (ReB + DiB) ))
+        done
+    done
+}
+
+solve() {
+    # Iterations
+    for (( n=1; n<=14; n ++ )); do
+        solve_one_iteration
+        solve_one_iteration_reversed
+    done
+}
+
+randomize() {
+    integer i j
+    float factor=0.1422
+    float prev1=0.0 prev2=0.0
+    float new1 new2
+
+    for (( i=1; i<=height; i ++ )); do
+        for (( j=1; j<=width; j ++ )); do
+            new1=$(( rand48() ))
+            if (( new1 > prev1 * factor )); then
+                new1=new1*0.5 
+            elif (( new1 < prev1 / factor )); then
+                new1=new1*2.0
+            fi
+
+            new2=$(( rand48() ))
+            if (( new2 > prev2 * factor )); then
+                new2=new2*0.5
+            elif (( new2 < prev2 / factor )); then
+                new2=new2*2.0
+            fi
+
+            # Store into the array
+            index=i*width+j
+            Ao[$index]=$(( new1*30.0 ))
+            Bo[$index]=$(( new2*30.0 ))
+
+            prev1=new1
+            prev2=new2
+        done
+    done
+}
+
+dump() {
+    print
+    for (( i=1; i<=height; i ++ )); do
+        for (( j=1; j<=width; j ++ )); do
+            index=i*width+j
+            LANG=C printf "(%.1f,%.1f)" ${Ao[$index]} ${Bo[$index]}
+        done
+        print
+    done
+}
+
+render() {
+    print
+    # Get maximum average
+    float max=0.0
+    for (( i=1; i<=height; i ++ )); do
+        for (( j=1; j<=width; j ++ )); do
+            index=i*width+j
+            tmp1=${Ao[$index]}
+            tmp2=${Bo[$index]}
+            tmp1=$(( (tmp1+tmp2) / 2.0 ))
+
+            if (( max < tmp1 )); then
+                max=tmp1
+            fi
+        done
+    done
+
+    for (( i=1; i<=height; i ++ )); do
+        for (( j=1; j<=width; j ++ )); do
+            index=i*width+j
+            tmp1=${Ao[$index]}
+            tmp2=${Bo[$index]}
+            tmp1=$(( (tmp1+tmp2) / 2.0 ))
+
+            (( color=ceil( (tmp1/max)*7.99) ))
+            colidx=$color
+            echo -n "\\e[4${colidx}m "
+        done
+        print
+    done
+}
+
+width=$(( COLUMNS -1 ))
+height=$(( LINES -2 ))
+randomize
+solve
+render
+
+# vim:ft=zsh
