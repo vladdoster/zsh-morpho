@@ -95,7 +95,7 @@ solve_one_iteration() {
     integer i j n i_add1 i_sub1 j_add1 j_sub1
     float DiA ReA DiB ReB
 
-    float Aval Bval tmp
+    float Aval Bval
     float Anext_x Anext_y Aprev_x Aprev_y
     float Bnext_x Bnext_y Bprev_x Bprev_y
 
@@ -149,11 +149,7 @@ solve_one_iteration() {
 
             # Euler step
             index=i*width+j
-            tmp=$(( Aval + 0.0105 * (ReA + DiA) ))
-            if (( tmp < 0.0 )); then
-                tmp=0.0
-            fi
-            An[$index]=$tmp
+            An[$index]=$(( Aval + 0.0105 * (ReA + DiA) ))
 
             # Substance B - its diffusion process
             DiB=$(( CB * ( Bnext_x - 2.0 * Bval + Bprev_x   +   Bnext_y - 2.0 * Bval + Bprev_y ) ))
@@ -161,11 +157,7 @@ solve_one_iteration() {
             ReB=$(( 16.0 - Aval * Bval ))
 
             # Euler step
-            tmp=$(( Bval + 0.0105 * (ReB + DiB) ))
-            if (( tmp < 0.0 )); then
-                tmp=0.0
-            fi
-            Bn[$index]=$tmp
+            Bn[$index]=$(( Bval + 0.0105 * (ReB + DiB) ))
         done
     done
 }
@@ -174,7 +166,7 @@ solve_one_iteration_reversed() {
     integer i j n i_add1 i_sub1 j_add1 j_sub1
     float DiA ReA DiB ReB
 
-    float Aval Bval tmp
+    float Aval Bval
     float Anext_x Anext_y Aprev_x Aprev_y
     float Bnext_x Bnext_y Bprev_x Bprev_y
 
@@ -228,11 +220,7 @@ solve_one_iteration_reversed() {
 
             # Euler step
             index=i*width+j
-            tmp=$(( Aval + 0.0105 * (ReA + DiA) ))
-            if (( tmp < 0.0 )); then
-                tmp=0.0
-            fi
-            Ao[$index]=$tmp
+            Ao[$index]=$(( Aval + 0.0105 * (ReA + DiA) ))
 
             # Substance B - its diffusion process
             DiB=$(( CB * ( Bnext_x - 2.0 * Bval + Bprev_x   +   Bnext_y - 2.0 * Bval + Bprev_y ) ))
@@ -240,11 +228,7 @@ solve_one_iteration_reversed() {
             ReB=$(( 16.0 - Aval * Bval ))
 
             # Euler step
-            tmp=$(( Bval + 0.0105 * (ReB + DiB) ))
-            if (( tmp < 0.0 )); then
-                tmp=0.0
-            fi
-            Bo[$index]=$tmp
+            Bo[$index]=$(( Bval + 0.0105 * (ReB + DiB) ))
         done
     done
 }
@@ -310,6 +294,13 @@ render() {
             index=i*width+j
             tmp1=${Bo[$index]}
             tmp2=${Bo[$index]}
+            if (( tmp1 < 0.0 )); then
+                tmp1=0.0
+            fi
+            if (( tmp2 < 0.0 )); then
+                tmp2=0.0
+            fi
+
             tmp1=$(( (tmp1+tmp2) / 2.0 ))
 
             if (( max < tmp1 )); then
@@ -323,6 +314,12 @@ render() {
             index=i*width+j
             tmp1=${Bo[$index]}
             tmp2=${Bo[$index]}
+            if (( tmp1 < 0.0 )); then
+                tmp1=0.0
+            fi
+            if (( tmp2 < 0.0 )); then
+                tmp2=0.0
+            fi
             tmp1=$(( (tmp1+tmp2) / 2.0 ))
 
             # 256-color variations
