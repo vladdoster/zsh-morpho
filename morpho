@@ -349,7 +349,7 @@ render() {
             echo -n "\\e[4${colidx}m "
 
         done
-        print
+        echo "\\e[0m"
     done
 }
 
