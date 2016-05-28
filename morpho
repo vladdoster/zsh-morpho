@@ -95,7 +95,7 @@ solve_one_iteration() {
     integer i j n i_add1 i_sub1 j_add1 j_sub1
     float DiA ReA DiB ReB
 
-    float Aval Bval
+    float Aval Bval tmp
     float Anext_x Anext_y Aprev_x Aprev_y
     float Bnext_x Bnext_y Bprev_x Bprev_y
 
@@ -149,7 +149,11 @@ solve_one_iteration() {
 
             # Euler step
             index=i*width+j
-            An[$index]=$(( Aval + 0.0105 * (ReA + DiA) ))
+            tmp=$(( Aval + 0.0105 * (ReA + DiA) ))
+            if (( tmp < 0.0 )); then
+                tmp=0.0
+            fi
+            An[$index]=$tmp
 
             # Substance B - its diffusion process
             DiB=$(( CB * ( Bnext_x - 2.0 * Bval + Bprev_x   +   Bnext_y - 2.0 * Bval + Bprev_y ) ))
@@ -157,7 +161,11 @@ solve_one_iteration() {
             ReB=$(( 16.0 - Aval * Bval ))
 
             # Euler step
-            Bn[$index]=$(( Bval + 0.0105 * (ReB + DiB) ))
+            tmp=$(( Bval + 0.0105 * (ReB + DiB) ))
+            if (( tmp < 0.0 )); then
+                tmp=0.0
+            fi
+            Bn[$index]=$tmp
         done
     done
 }
@@ -166,7 +174,7 @@ solve_one_iteration_reversed() {
     integer i j n i_add1 i_sub1 j_add1 j_sub1
     float DiA ReA DiB ReB
 
-    float Aval Bval
+    float Aval Bval tmp
     float Anext_x Anext_y Aprev_x Aprev_y
     float Bnext_x Bnext_y Bprev_x Bprev_y
 
@@ -220,7 +228,11 @@ solve_one_iteration_reversed() {
 
             # Euler step
             index=i*width+j
-            Ao[$index]=$(( Aval + 0.0105 * (ReA + DiA) ))
+            tmp=$(( Aval + 0.0105 * (ReA + DiA) ))
+            if (( tmp < 0.0 )); then
+                tmp=0.0
+            fi
+            Ao[$index]=$tmp
 
             # Substance B - its diffusion process
             DiB=$(( CB * ( Bnext_x - 2.0 * Bval + Bprev_x   +   Bnext_y - 2.0 * Bval + Bprev_y ) ))
@@ -228,7 +240,11 @@ solve_one_iteration_reversed() {
             ReB=$(( 16.0 - Aval * Bval ))
 
             # Euler step
-            Bo[$index]=$(( Bval + 0.0105 * (ReB + DiB) ))
+            tmp=$(( Bval + 0.0105 * (ReB + DiB) ))
+            if (( tmp < 0.0 )); then
+                tmp=0.0
+            fi
+            Bo[$index]=$tmp
         done
     done
 }
