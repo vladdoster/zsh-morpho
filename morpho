@@ -6,6 +6,7 @@ integer width=10 height=10
 
 float CA=10.0
 float CB=23.39
+integer iterations=14
 
 # Old system state
 typeset -A Ao Bo
@@ -162,7 +163,7 @@ solve_one_iteration_reversed() {
 
 solve() {
     # Iterations
-    for (( n=1; n<=14; n ++ )); do
+    for (( n=1; n<=iterations; n ++ )); do
         solve_one_iteration
         solve_one_iteration_reversed
     done
