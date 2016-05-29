@@ -243,7 +243,7 @@ solve() {
 
 randomize() {
     integer i j
-    float factor=1.622
+    float factor=1.422
     float prev1=0.0 prev2=0.0
     float new1 new2
 
