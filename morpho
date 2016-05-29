@@ -243,7 +243,7 @@ solve() {
 
 randomize() {
     integer i j
-    float factor=0.1422
+    float factor=1.422
     float prev1=0.0 prev2=0.0
     float new1 new2
 
@@ -292,15 +292,8 @@ render() {
     for (( i=1; i<=height; i ++ )); do
         for (( j=1; j<=width; j ++ )); do
             index=i*width+j
-            tmp1=${Bo[$index]}
+            tmp1=${Ao[$index]}
             tmp2=${Bo[$index]}
-            if (( tmp1 < 0.0 )); then
-                tmp1=0.0
-            fi
-            if (( tmp2 < 0.0 )); then
-                tmp2=0.0
-            fi
-
             tmp1=$(( (tmp1+tmp2) / 2.0 ))
 
             if (( max < tmp1 )); then
@@ -312,14 +305,8 @@ render() {
     for (( i=1; i<=height; i ++ )); do
         for (( j=1; j<=width; j ++ )); do
             index=i*width+j
-            tmp1=${Bo[$index]}
+            tmp1=${Ao[$index]}
             tmp2=${Bo[$index]}
-            if (( tmp1 < 0.0 )); then
-                tmp1=0.0
-            fi
-            if (( tmp2 < 0.0 )); then
-                tmp2=0.0
-            fi
             tmp1=$(( (tmp1+tmp2) / 2.0 ))
 
             # 256-color variations
