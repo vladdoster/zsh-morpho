@@ -243,7 +243,7 @@ solve() {
 
 randomize() {
     integer i j
-    float factor=1.422
+    float factor=1.322
     float prev1=0.0 prev2=0.0
     float new1 new2
 
@@ -251,16 +251,16 @@ randomize() {
         for (( j=1; j<=width; j ++ )); do
             new1=$(( rand48() ))
             if (( new1 > prev1 * factor )); then
-                new1=new1*0.5 
+                new1=new1*0.4 
             elif (( new1 < prev1 / factor )); then
-                new1=new1*2.0
+                new1=new1/0.4
             fi
 
             new2=$(( rand48() ))
             if (( new2 > prev2 * factor )); then
-                new2=new2*0.5
+                new2=new2*0.4
             elif (( new2 < prev2 / factor )); then
-                new2=new2*2.0
+                new2=new2/0.4
             fi
 
             # Store into the array
