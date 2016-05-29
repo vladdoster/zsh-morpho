@@ -4,10 +4,6 @@ zmodload zsh/mathfunc
 
 integer width=10 height=10
 
-float CA=10.0
-float CB=23.39
-integer iterations=14
-
 # Old system state
 typeset -A Ao Bo
 
@@ -20,6 +16,21 @@ float color
 float shade
 float tmp1 tmp2
 
+# Configurations
+integer crowsize=7
+configs=( #CA#  #CB#   #iter.# #internal mul.#   #factor#  #smooth mul."   #a, b, both#
+          10.0  23.39  14      0.0105             1.422    0.3             3
+          10.0  23.39  14      0.0105             0.1422   0.5             2
+) 
+
+float CA=10.0
+float CB=23.39
+integer C_iter
+float C_imul C_factor C_smul
+integer C_abboth
+
+# One iteration on An, Bn
+# {{{
 solve_one_iteration() {
     integer i j n i_add1 i_sub1 j_add1 j_sub1
     float DiA ReA DiB ReB
@@ -78,7 +89,7 @@ solve_one_iteration() {
 
             # Euler step
             index=i*width+j
-            An[$index]=$(( Aval + 0.0105 * (ReA + DiA) ))
+            An[$index]=$(( Aval + C_imul * (ReA + DiA) ))
 
             # Substance B - its diffusion process
             DiB=$(( CB * ( Bnext_x - 2.0 * Bval + Bprev_x   +   Bnext_y - 2.0 * Bval + Bprev_y ) ))
@@ -86,11 +97,14 @@ solve_one_iteration() {
             ReB=$(( 16.0 - Aval * Bval ))
 
             # Euler step
-            Bn[$index]=$(( Bval + 0.0105 * (ReB + DiB) ))
+            Bn[$index]=$(( Bval + C_imul * (ReB + DiB) ))
         done
     done
 }
+# }}}
 
+# One iteration on Ao, Bo
+# {{{
 solve_one_iteration_reversed() {
     integer i j n i_add1 i_sub1 j_add1 j_sub1
     float DiA ReA DiB ReB
@@ -149,7 +163,7 @@ solve_one_iteration_reversed() {
 
             # Euler step
             index=i*width+j
-            Ao[$index]=$(( Aval + 0.0105 * (ReA + DiA) ))
+            Ao[$index]=$(( Aval + C_imul * (ReA + DiA) ))
 
             # Substance B - its diffusion process
             DiB=$(( CB * ( Bnext_x - 2.0 * Bval + Bprev_x   +   Bnext_y - 2.0 * Bval + Bprev_y ) ))
@@ -157,39 +171,44 @@ solve_one_iteration_reversed() {
             ReB=$(( 16.0 - Aval * Bval ))
 
             # Euler step
-            Bo[$index]=$(( Bval + 0.0105 * (ReB + DiB) ))
+            Bo[$index]=$(( Bval + C_imul * (ReB + DiB) ))
         done
     done
 }
+# }}}
 
+# Main loop
+# {{{
 solve() {
     # Iterations
-    for (( n=1; n<=iterations; n ++ )); do
+    for (( n=1; n<=C_iter; n ++ )); do
         solve_one_iteration
         solve_one_iteration_reversed
     done
 }
+# }}}
 
+# Initial randomization
+# {{{
 randomize() {
     integer i j
-    float factor=1.422
     float prev1=0.0 prev2=0.0
     float new1 new2
 
     for (( i=1; i<=height; i ++ )); do
         for (( j=1; j<=width; j ++ )); do
             new1=$(( rand48() ))
-            if (( new1 > prev1 * factor )); then
-                new1=new1*0.3
-            elif (( new1 < prev1 / factor )); then
-                new1=new1/0.3
+            if (( new1 > prev1 * C_factor )); then
+                new1=new1*C_smul
+            elif (( new1 < prev1 / C_factor )); then
+                new1=new1/C_smul
             fi
 
             new2=$(( rand48() ))
-            if (( new2 > prev2 * factor )); then
-                new2=new2*0.3
-            elif (( new2 < prev2 / factor )); then
-                new2=new2/0.3
+            if (( new2 > prev2 * C_factor )); then
+                new2=new2*C_smul
+            elif (( new2 < prev2 / C_factor )); then
+                new2=new2/C_smul
             fi
 
             # Store into the array
@@ -202,7 +221,10 @@ randomize() {
         done
     done
 }
+# }}}
 
+# Dump values
+# {{{
 dump() {
     print
     for (( i=1; i<=height; i ++ )); do
@@ -213,7 +235,10 @@ dump() {
         print
     done
 }
+# }}}
 
+# Draw
+# {{{
 render() {
     print
     # Get maximum average
@@ -221,8 +246,16 @@ render() {
     for (( i=1; i<=height; i ++ )); do
         for (( j=1; j<=width; j ++ )); do
             index=i*width+j
-            tmp1=${Ao[$index]}
-            tmp2=${Bo[$index]}
+            if (( C_abboth == 1 )); then
+                tmp1=${Ao[$index]}
+                tmp2=${Ao[$index]}
+            elif (( C_abboth == 2 )); then
+                tmp1=${Bo[$index]}
+                tmp2=${Bo[$index]}
+            else
+                tmp1=${Ao[$index]}
+                tmp2=${Bo[$index]}
+            fi
             tmp1=$(( (tmp1+tmp2) / 2.0 ))
 
             if (( max < tmp1 )); then
@@ -234,8 +267,16 @@ render() {
     for (( i=1; i<=height; i ++ )); do
         for (( j=1; j<=width; j ++ )); do
             index=i*width+j
-            tmp1=${Ao[$index]}
-            tmp2=${Bo[$index]}
+            if (( C_abboth == 1 )); then
+                tmp1=${Ao[$index]}
+                tmp2=${Ao[$index]}
+            elif (( C_abboth == 2 )); then
+                tmp1=${Bo[$index]}
+                tmp2=${Bo[$index]}
+            else
+                tmp1=${Ao[$index]}
+                tmp2=${Bo[$index]}
+            fi
             tmp1=$(( (tmp1+tmp2) / 2.0 ))
 
             # 256-color variations
@@ -268,9 +309,36 @@ render() {
         echo "\\e[0m"
     done
 }
+# }}}
+
+#
+# Main code
+#
 
 width=$(( COLUMNS -1 ))
 height=$(( LINES -2 ))
+
+#
+# Select configuration
+#
+
+integer crows=$(( ${#configs} / crowsize ))
+integer crow=$(( (RANDOM % crows) + 1 ))
+#crow=1
+integer cidx=$(( (crow-1)*crowsize + 1 ))
+
+#echo "crows $crows, crowsize $crowsize , crow $crow, cidx $cidx"
+
+CA=$configs[cidx]
+CB=$configs[cidx+1]
+C_iter=$configs[cidx+2]
+C_imul=$configs[cidx+3]
+C_factor=$configs[cidx+4]
+C_smul=$configs[cidx+5]
+C_abboth=$configs[cidx+6]
+
+#echo "Config is: CA $CA, CB $CB, C_iter $C_iter, C_imul $C_imul, C_factor $C_factor, C_smul $C_smul, C_abboth $C_abboth"
+
 randomize
 solve
 render
