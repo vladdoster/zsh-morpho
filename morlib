@@ -24,4 +24,12 @@ zmodload zsh/terminfo 2>/dev/null && _morlib_has_terminfo=1
     esac
 }
 
+-morlib_begin() {
+    -morlib_alternate_screen 1
+}
+
+-morlib_end() {
+    -morlib_alternate_screen 0
+}
+
 # vim:ft=zsh

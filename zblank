@@ -1,0 +1,25 @@
+emulate -LR zsh
+
+#
+# Main code
+#
+
+# Standard screen saver before-loop block
+autoload morlib
+morlib
+setopt localtraps
+-morlib_begin
+trap "return" TERM INT QUIT
+trap "-morlib_end" EXIT
+integer redraw_delay
+zstyle -s ':morpho' redraw-delay redraw_delay || redraw_delay=300
+# End of standard screen saver before-loop block
+
+# Main loop
+# Does nothing, the -morlib_alternate_screen
+# call already cleared the screen
+while (( 1 )); do
+    sleep $redraw_delay
+done
+
+# vim:ft=zsh
