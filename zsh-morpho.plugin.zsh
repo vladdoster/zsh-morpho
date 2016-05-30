@@ -5,11 +5,11 @@
 # to ~/.zshrc.
 #
 # Available zstyles. Given values are the defaults
-# zstyle ":morpho" screen-saver "morpho" # select screen-saver "morpho"; available: morpho, mandelbrot
-#                                        # this  can also be a command, e.g. "cmatrix"
-# zstyle ":morpho" delay "310"           # 5 minutes before screen-saver starts
-# zstyle ":morpho" check-interval "60"   # check every 1 minute if to run screen-saver
-# zstyle ":morpho" redraw-delay   "300"  # how often screen-saver redraws
+# zstyle ":morpho" screen-saver "zmorpho" # select screen-saver "zmorpho"; available: zmorpho, zmandelbrot, zblank
+#                                         # this  can also be a command, e.g. "cmatrix"
+# zstyle ":morpho" delay "310"            # 5 minutes before screen-saver starts
+# zstyle ":morpho" check-interval "60"    # check every 1 minute if to run screen-saver
+# zstyle ":morpho" redraw-delay   "300"   # how often screen-saver redraws
 
 REPO_DIR="${0%/*}"
 
@@ -27,7 +27,7 @@ fi
 zmodload zsh/sched
 
 # Autoloads
-autoload morlib morpho mandelbrot add-zsh-hook
+autoload morlib zmorpho zmandelbrot zblank add-zsh-hook
 
 # Global variables
 typeset -g morpho_check_interval
@@ -61,7 +61,7 @@ zstyle -s ':morpho' check-interval morpho_check_interval || morpho_check_interva
     if (( current_timestamp - active_timestamp > delay )); then
         # Load wanted screen saver
         local screen_saver
-        zstyle -s ':morpho' screen-saver screen_saver || screen_saver="morpho"
+        zstyle -s ':morpho' screen-saver screen_saver || screen_saver="zmorpho"
         "$screen_saver"
     fi
 
