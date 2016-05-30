@@ -28,8 +28,13 @@ To test screen savers run them directly from command line, e.g. issue "`zmorpho`
 
 ## Installation
 
-Recommended plugin manager is `Zplugin`, but you can use any other too, and also
-install with `Oh My Zsh` (by copying directory to `~/.oh-my-zsh/custom/plugins`).
+The plugin is "standalone", which means that only sourcing it is needed. So to
+install, unpack `zsh-morpho` somewhere and add
+`source {where-zsh-morpho-is}/zsh-morpho.plugin.zsh` to `zshrc`.
+
+If using a plugin manager, then `Zplugin` is recommended, but you can use any
+other too, and also install with `Oh My Zsh` (by copying directory to
+`~/.oh-my-zsh/custom/plugins`).
 
 ### [Zplugin](https://github.com/psprint/zplugin)
 
