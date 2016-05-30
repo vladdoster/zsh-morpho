@@ -266,6 +266,7 @@ render() {
 #
 
 # Standard screen saver before-loop block
+autoload morlib
 morlib
 setopt localtraps
 -morlib_alternate_screen 1
