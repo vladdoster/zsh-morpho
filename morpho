@@ -273,7 +273,7 @@ setopt localtraps
 trap "return" TERM INT QUIT
 trap "-morlib_alternate_screen 0" EXIT
 integer redraw_delay
-zstyle -s ':morpho' redraw-delay || redraw_delay=300
+zstyle -s ':morpho' redraw-delay redraw_delay || redraw_delay=300
 # End of standard screen saver before-loop block
 
 # Main loop
