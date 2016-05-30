@@ -55,32 +55,20 @@ solve_one_iteration() {
             Aval=${Ao[$index]}
             Bval=${Bo[$index]}
 
-            #
-            # const double Anext_x = m_Ao[i][j_add1], Anext_y = m_Ao[i_add1][j];
-            #
-            index=i*width+j_add1
-            Anext_x=${Ao[$index]}
-            index=i_add1*width+j
-            Anext_y=${Ao[$index]}
-
-            # const double Aprev_x = m_Ao[i][j_sub1], Aprev_y = m_Ao[i_sub1][j];
-            index=i*width+j_sub1
-            Aprev_x=${Ao[$index]}
-            index=i_sub1*width+j
-            Aprev_y=${Ao[$index]}
-
-            #
-            # const double Bnext_x = m_Bo[i][j_add1], Bnext_y = m_Bo[i_add1][j];
-            #
             index=i*width+j_add1
             Bnext_x=${Bo[$index]}
+            Anext_x=${Ao[$index]}
+
             index=i_add1*width+j
+            Anext_y=${Ao[$index]}
             Bnext_y=${Bo[$index]}
 
-            # const double Bprev_x = m_Bo[i][j_sub1], Bprev_y = m_Bo[i_sub1][j];
             index=i*width+j_sub1
+            Aprev_x=${Ao[$index]}
             Bprev_x=${Bo[$index]}
+
             index=i_sub1*width+j
+            Aprev_y=${Ao[$index]}
             Bprev_y=${Bo[$index]}
 
             # Substance A - its diffusion process
@@ -129,32 +117,20 @@ solve_one_iteration_reversed() {
             Aval=${An[$index]}
             Bval=${Bn[$index]}
 
-            #
-            # const double Anext_x = m_Ao[i][j_add1], Anext_y = m_Ao[i_add1][j];
-            #
             index=i*width+j_add1
             Anext_x=${An[$index]}
+            Bnext_x=${Bn[$index]}
+
             index=i_add1*width+j
             Anext_y=${An[$index]}
-
-            # const double Aprev_x = m_Ao[i][j_sub1], Aprev_y = m_Ao[i_sub1][j];
-            index=i*width+j_sub1
-            Aprev_x=${An[$index]}
-            index=i_sub1*width+j
-            Aprev_y=${An[$index]}
-
-            #
-            # const double Bnext_x = m_Bo[i][j_add1], Bnext_y = m_Bo[i_add1][j];
-            #
-            index=i*width+j_add1
-            Bnext_x=${Bn[$index]}
-            index=i_add1*width+j
             Bnext_y=${Bn[$index]}
 
-            # const double Bprev_x = m_Bo[i][j_sub1], Bprev_y = m_Bo[i_sub1][j];
             index=i*width+j_sub1
+            Aprev_x=${An[$index]}
             Bprev_x=${Bn[$index]}
+
             index=i_sub1*width+j
+            Aprev_y=${An[$index]}
             Bprev_y=${Bn[$index]}
 
             # Substance A - its diffusion process
