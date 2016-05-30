@@ -28,6 +28,8 @@ zmodload zsh/sched
 
 # Autoloads
 autoload morlib zmorpho zmandelbrot zblank add-zsh-hook
+# zle -N zmorpho
+# bindkey '^t' zmorpho
 
 # Global variables
 typeset -g morpho_check_interval
