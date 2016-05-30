@@ -276,7 +276,7 @@ trap "-morlib_alternate_screen 0" EXIT
 # Main loop
 while (( 1 )); do
     width=$(( COLUMNS -1 ))
-    height=$(( LINES -2 ))
+    height=$(( LINES -1 ))
 
     #
     # Select configuration
