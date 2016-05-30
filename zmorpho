@@ -230,9 +230,6 @@ float Bnext_x Bnext_y Bprev_x Bprev_y
             tmp1=$(( (tmp1+tmp2) / 2.0 ))
 
             # 256-color variations
-            #(( color=ceil( (tmp1/max)*214.99) ))
-            #colidx=color+232
-
             #(( color=ceil( (tmp1/max)*20.99) ))
             #colidx=color+232
 
