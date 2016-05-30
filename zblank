@@ -16,7 +16,7 @@ zstyle -s ':morpho' redraw-delay redraw_delay || redraw_delay=300
 # End of standard screen saver before-loop block
 
 # Main loop
-# Does nothing, the -morlib_alternate_screen
+# Does nothing, the -morlib_begin
 # call already cleared the screen
 while (( 1 )); do
     sleep $redraw_delay
