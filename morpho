@@ -32,6 +32,7 @@ integer C_abboth
 
 # solve_one_iteration* vars
 integer i j n i_add1 i_sub1 j_add1 j_sub1
+integer index index_jadd1 index_iadd1 index_jsub1 index_isub1
 float DiA ReA DiB ReB
 float Aval Bval
 float Anext_x Anext_y Aprev_x Aprev_y
@@ -50,38 +51,28 @@ solve_one_iteration() {
             j_sub1=j-1
             (( j_sub1 < 1 )) && j_sub1=width
 
-            # const double Aval = m_Ao[i][j], Bval = m_Bo[i][j];
             index=i*width+j
+            index_jadd1=i*width+j_add1
+            index_iadd1=i_add1*width+j
+            index_jsub1=i*width+j_sub1
+            index_isub1=i_sub1*width+j
+
             Aval=${Ao[$index]}
             Bval=${Bo[$index]}
 
-            index=i*width+j_add1
-            Bnext_x=${Bo[$index]}
-            Anext_x=${Ao[$index]}
-
-            index=i_add1*width+j
-            Anext_y=${Ao[$index]}
-            Bnext_y=${Bo[$index]}
-
-            index=i*width+j_sub1
-            Aprev_x=${Ao[$index]}
-            Bprev_x=${Bo[$index]}
-
-            index=i_sub1*width+j
-            Aprev_y=${Ao[$index]}
-            Bprev_y=${Bo[$index]}
-
             # Substance A - its diffusion process
-            DiA=$(( CA * ( Anext_x - 2.0 * Aval + Aprev_x   +   Anext_y - 2.0 * Aval + Aprev_y ) ))
+            # DiA=$(( CA * (Anext_x - 2.0 * Aval + Aprev_x  +  Anext_y - 2.0 * Aval + Aprev_y) ))
+            DiA=$(( CA * ( ${Ao[$index_jadd1]} - 2.0 * Aval + ${Ao[$index_jsub1]}   +
+                           ${Ao[$index_iadd1]} - 2.0 * Aval + ${Ao[$index_isub1]} ) ))
             # ... its reaction process
             ReA=$(( Aval * Bval - Aval - 12.0 ))
 
-            # Euler step
-            index=i*width+j
             An[$index]=$(( Aval + C_imul * (ReA + DiA) ))
 
             # Substance B - its diffusion process
-            DiB=$(( CB * ( Bnext_x - 2.0 * Bval + Bprev_x   +   Bnext_y - 2.0 * Bval + Bprev_y ) ))
+            # DiB=$(( CB * (Bnext_x - 2.0 * Bval + Bprev_x  +  Bnext_y - 2.0 * Bval + Bprev_y) ))
+            DiB=$(( CB * ( ${Bo[$index_jadd1]} - 2.0 * Bval + ${Bo[$index_jsub1]}   +
+                           ${Bo[$index_iadd1]} - 2.0 * Bval + ${Bo[$index_isub1]} ) ))
             # ... its reaction process
             ReB=$(( 16.0 - Aval * Bval ))
 
@@ -105,42 +96,31 @@ solve_one_iteration_reversed() {
             j_sub1=j-1
             (( j_sub1 < 1 )) && j_sub1=width
 
-            # const double Aval = m_Ao[i][j], Bval = m_Bo[i][j];
             index=i*width+j
+            index_jadd1=i*width+j_add1
+            index_iadd1=i_add1*width+j
+            index_jsub1=i*width+j_sub1
+            index_isub1=i_sub1*width+j
+
             Aval=${An[$index]}
             Bval=${Bn[$index]}
 
-            index=i*width+j_add1
-            Anext_x=${An[$index]}
-            Bnext_x=${Bn[$index]}
-
-            index=i_add1*width+j
-            Anext_y=${An[$index]}
-            Bnext_y=${Bn[$index]}
-
-            index=i*width+j_sub1
-            Aprev_x=${An[$index]}
-            Bprev_x=${Bn[$index]}
-
-            index=i_sub1*width+j
-            Aprev_y=${An[$index]}
-            Bprev_y=${Bn[$index]}
-
             # Substance A - its diffusion process
-            DiA=$(( CA * ( Anext_x - 2.0 * Aval + Aprev_x   +   Anext_y - 2.0 * Aval + Aprev_y ) ))
+            # DiA=$(( CA * (Anext_x - 2.0 * Aval + Aprev_x  +  Anext_y - 2.0 * Aval + Aprev_y) ))
+            DiA=$(( CA * ( ${An[$index_jadd1]} - 2.0 * Aval + ${An[$index_jsub1]}   +
+                           ${An[$index_iadd1]} - 2.0 * Aval + ${An[$index_isub1]} ) ))
             # ... its reaction process
             ReA=$(( Aval * Bval - Aval - 12.0 ))
 
-            # Euler step
-            index=i*width+j
             Ao[$index]=$(( Aval + C_imul * (ReA + DiA) ))
 
             # Substance B - its diffusion process
-            DiB=$(( CB * ( Bnext_x - 2.0 * Bval + Bprev_x   +   Bnext_y - 2.0 * Bval + Bprev_y ) ))
+            # DiB=$(( CB * (Bnext_x - 2.0 * Bval + Bprev_x  +  Bnext_y - 2.0 * Bval + Bprev_y) ))
+            DiB=$(( CB * ( ${Bn[$index_jadd1]} - 2.0 * Bval + ${Bn[$index_jsub1]}   +
+                           ${Bn[$index_iadd1]} - 2.0 * Bval + ${Bn[$index_isub1]} ) ))
             # ... its reaction process
             ReB=$(( 16.0 - Aval * Bval ))
 
-            # Euler step
             Bo[$index]=$(( Bval + C_imul * (ReB + DiB) ))
         done
     done
