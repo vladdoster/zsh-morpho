@@ -17,6 +17,6 @@ if [[ -z "$ZPLG_CUR_PLUGIN" && "${fpath[(r)$REPO_DIR]}" != $REPO_DIR ]]; then
     fpath+=( "$REPO_DIR" )
 fi
 
-autoload morpho
+autoload morlib morpho
 zle -N morpho
 bindkey '^t' morpho

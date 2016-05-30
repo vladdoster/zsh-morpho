@@ -265,32 +265,41 @@ render() {
 # Main code
 #
 
-width=$(( COLUMNS -1 ))
-height=$(( LINES -2 ))
+# Standard screen saver before-loop block
+morlib
+setopt localtraps
+-morlib_alternate_screen 1
+trap "return" TERM INT QUIT
+trap "-morlib_alternate_screen 0" EXIT
+# End of standard screen saver before-loop block
 
-#
-# Select configuration
-#
+# Main loop
+while (( 1 )); do
+    width=$(( COLUMNS -1 ))
+    height=$(( LINES -2 ))
 
-integer crows=$(( ${#configs} / crowsize ))
-integer crow=$(( (RANDOM % crows) + 1 ))
-#crow=1
-integer cidx=$(( (crow-1)*crowsize + 1 ))
+    #
+    # Select configuration
+    #
 
-#echo "crows $crows, crowsize $crowsize , crow $crow, cidx $cidx"
+    integer crows=$(( ${#configs} / crowsize ))
+    integer crow=$(( (RANDOM % crows) + 1 ))
+    #crow=1
+    integer cidx=$(( (crow-1)*crowsize + 1 ))
 
-CA=$configs[cidx]
-CB=$configs[cidx+1]
-C_iter=$configs[cidx+2]
-C_imul=$configs[cidx+3]
-C_factor=$configs[cidx+4]
-C_smul=$configs[cidx+5]
-C_abboth=$configs[cidx+6]
+    CA=$configs[cidx]
+    CB=$configs[cidx+1]
+    C_iter=$configs[cidx+2]
+    C_imul=$configs[cidx+3]
+    C_factor=$configs[cidx+4]
+    C_smul=$configs[cidx+5]
+    C_abboth=$configs[cidx+6]
 
-#echo "Config is: CA $CA, CB $CB, C_iter $C_iter, C_imul $C_imul, C_factor $C_factor, C_smul $C_smul, C_abboth $C_abboth"
+    randomize
+    solve
+    render
 
-randomize
-solve
-render
+    sleep $(( 5 * 60 ))
+done
 
 # vim:ft=zsh
