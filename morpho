@@ -30,16 +30,16 @@ integer C_iter
 float C_imul C_factor C_smul
 integer C_abboth
 
+# solve_one_iteration* vars
+integer i j n i_add1 i_sub1 j_add1 j_sub1
+float DiA ReA DiB ReB
+float Aval Bval
+float Anext_x Anext_y Aprev_x Aprev_y
+float Bnext_x Bnext_y Bprev_x Bprev_y
+
 # One iteration on An, Bn
 # {{{
 solve_one_iteration() {
-    integer i j n i_add1 i_sub1 j_add1 j_sub1
-    float DiA ReA DiB ReB
-
-    float Aval Bval
-    float Anext_x Anext_y Aprev_x Aprev_y
-    float Bnext_x Bnext_y Bprev_x Bprev_y
-
     for (( i=1; i<=height; i ++ )); do
         i_add1=1+(i%height)
         i_sub1=i-1
@@ -95,13 +95,6 @@ solve_one_iteration() {
 # One iteration on Ao, Bo
 # {{{
 solve_one_iteration_reversed() {
-    integer i j n i_add1 i_sub1 j_add1 j_sub1
-    float DiA ReA DiB ReB
-
-    float Aval Bval
-    float Anext_x Anext_y Aprev_x Aprev_y
-    float Bnext_x Bnext_y Bprev_x Bprev_y
-
     for (( i=1; i<=height; i ++ )); do
         i_add1=1+(i%height)
         i_sub1=i-1
