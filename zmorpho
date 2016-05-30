@@ -30,7 +30,7 @@ integer C_iter
 float C_imul C_factor C_smul
 integer C_abboth
 
-# solve_one_iteration* vars
+# -morpho_solve_one_iteration* vars
 integer i j n i_add1 i_sub1 j_add1 j_sub1
 integer index index_jadd1 index_iadd1 index_jsub1 index_isub1
 float DiA ReA DiB ReB
@@ -40,7 +40,7 @@ float Bnext_x Bnext_y Bprev_x Bprev_y
 
 # One iteration on An, Bn
 # {{{
-solve_one_iteration() {
+-morpho_solve_one_iteration() {
     for (( i=1; i<=height; i ++ )); do
         i_add1=1+(i%height)
         i_sub1=i-1
@@ -85,7 +85,7 @@ solve_one_iteration() {
 
 # One iteration on Ao, Bo
 # {{{
-solve_one_iteration_reversed() {
+-morpho_solve_one_iteration_reversed() {
     for (( i=1; i<=height; i ++ )); do
         i_add1=1+(i%height)
         i_sub1=i-1
@@ -129,18 +129,18 @@ solve_one_iteration_reversed() {
 
 # Main loop
 # {{{
-solve() {
+-morpho_solve() {
     # Iterations
     for (( n=1; n<=C_iter; n ++ )); do
-        solve_one_iteration
-        solve_one_iteration_reversed
+        -morpho_solve_one_iteration
+        -morpho_solve_one_iteration_reversed
     done
 }
 # }}}
 
 # Initial randomization
 # {{{
-randomize() {
+-morpho_randomize() {
     integer i j
     float prev1=0.0 prev2=0.0
     float new1 new2
@@ -175,7 +175,7 @@ randomize() {
 
 # Dump values
 # {{{
-dump() {
+-morpho_dump() {
     print
     for (( i=1; i<=height; i ++ )); do
         for (( j=1; j<=width; j ++ )); do
@@ -189,7 +189,7 @@ dump() {
 
 # Draw
 # {{{
-render() {
+-morpho_render() {
     print
     # Get maximum average
     float max=0.0
@@ -298,9 +298,9 @@ while (( 1 )); do
     C_smul=$configs[cidx+5]
     C_abboth=$configs[cidx+6]
 
-    randomize
-    solve
-    render
+    -morpho_randomize
+    -morpho_solve
+    -morpho_render
 
     sleep $redraw_delay
 done

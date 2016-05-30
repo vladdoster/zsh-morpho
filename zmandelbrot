@@ -1,7 +1,7 @@
 emulate -LR zsh
 
 # Draws mandelbrot fractal {{{1
-function -morpho-mandelbrot {
+function -morpho_mandelbrot {
    integer lines columns colour i=0
    float a b p q pnew
 
@@ -38,7 +38,7 @@ zstyle -s ':morpho' redraw-delay redraw_delay || redraw_delay=300
 
 # Main loop
 while (( 1 )); do
-    -morpho-mandelbrot
+    -morpho_mandelbrot
 
     sleep $redraw_delay
 done
