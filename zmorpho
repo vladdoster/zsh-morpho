@@ -253,7 +253,7 @@ float Bnext_x Bnext_y Bprev_x Bprev_y
             echo -n "\\e[4${colidx}m "
 
         done
-        echo "\\e[0m"
+        echo -n "\\e[0m"
     done
 }
 # }}}
@@ -275,8 +275,8 @@ zstyle -s ':morpho' redraw-delay redraw_delay || redraw_delay=300
 
 # Main loop
 while (( 1 )); do
-    width=$(( COLUMNS -1 ))
-    height=$(( LINES -1 ))
+    width=$(( COLUMNS ))
+    height=$(( LINES ))
 
     #
     # Select configuration
