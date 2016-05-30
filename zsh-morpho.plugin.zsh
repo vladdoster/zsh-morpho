@@ -27,9 +27,10 @@ fi
 zmodload zsh/sched
 
 # Autoloads
-autoload morlib zmorpho zmandelbrot zblank add-zsh-hook
-# zle -N zmorpho
-# bindkey '^t' zmorpho
+autoload add-zsh-hook
+
+# Extend path
+path+=( "$REPO_DIR" )
 
 # Global variables
 typeset -g morpho_check_interval

@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 emulate -LR zsh
 
 zmodload zsh/mathfunc
@@ -263,11 +265,11 @@ float Bnext_x Bnext_y Bprev_x Bprev_y
 #
 
 # Standard screen saver before-loop block
+fpath+=( "${0%/*}" )
 autoload morlib
 morlib
-setopt localtraps
 -morlib_begin
-trap "return" TERM INT QUIT
+trap "-morlib_end; exit" TERM INT QUIT
 trap "-morlib_end" EXIT
 integer redraw_delay
 zstyle -s ':morpho' redraw-delay redraw_delay || redraw_delay=300
