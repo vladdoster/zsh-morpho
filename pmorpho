@@ -269,8 +269,19 @@ def alternate_screen(onoff):
     sys.stdout.write(code)
     sys.stdout.flush()
 
+# Makes cursor invisible or visible
+def cursor_visibility(onoff):
+    if onoff == "on":
+        code = os.popen('tput cnorm', 'r').read()
+    else:
+        code = os.popen('tput civis', 'r').read()
+    sys.stdout.write(code)
+    sys.stdout.flush()
+
 alternate_screen("on")
+cursor_visibility("off")
 atexit.register(alternate_screen, 'off')
+atexit.register(cursor_visibility, 'on')
 
 #
 # Main code
