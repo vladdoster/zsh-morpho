@@ -4,6 +4,8 @@ emulate -LR zsh
 
 zmodload zsh/mathfunc
 
+[ "$1" = "-s" ] && SSAVER_MODE="1"
+
 integer width=10 height=10
 
 # Old system state
@@ -134,7 +136,10 @@ float Bnext_x Bnext_y Bprev_x Bprev_y
 -morpho_solve() {
     # Iterations
     for (( n=1; n<=C_iter; n ++ )); do
+        # Screen saver mode - every key exits
+        [ "$SSAVER_MODE" = "1" ] && read -rs -k 1 -t && exit
         -morpho_solve_one_iteration
+        [ "$SSAVER_MODE" = "1" ] && read -rs -k 1 -t && exit
         -morpho_solve_one_iteration_reversed
     done
 }
@@ -301,7 +306,11 @@ while (( 1 )); do
     -morpho_solve
     -morpho_render
 
-    sleep $redraw_delay
+    if [ "$SSAVER_MODE" = "1" ]; then
+        -morlib_wait_for_any_key $redraw_delay && exit
+    else
+        sleep $redraw_delay
+    fi
 done
 
 # vim:ft=zsh

@@ -36,6 +36,10 @@ zmodload zsh/terminfo 2>/dev/null && _morlib_has_terminfo=1
     fi 
 }
 
+-morlib_wait_for_any_key() {
+    read -rs -k 1 -t "$1"
+}
+
 -morlib_begin() {
     -morlib_alternate_screen 1
     -morlib_cursor_visibility 0
