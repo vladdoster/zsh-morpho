@@ -39,7 +39,7 @@ C_factor = 0.0
 C_smul = 0.0
 C_abboth = 0.0
 
-# -morpho_solve_one_iteration* vars
+# morpho_solve_one_iteration* vars
 i = 0
 j = 0
 n = 0
@@ -246,6 +246,7 @@ def morpho_render():
 # }}}
 
 # Alternate screen
+# {{{
 def alternate_screen(onoff):
     if onoff == "on":
         code = os.popen('tput smcup', 'r').read()
@@ -268,8 +269,10 @@ def alternate_screen(onoff):
 
     sys.stdout.write(code)
     sys.stdout.flush()
+# }}}
 
 # Makes cursor invisible or visible
+# {{{
 def cursor_visibility(onoff):
     if onoff == "on":
         code = os.popen('tput cnorm', 'r').read()
@@ -277,6 +280,7 @@ def cursor_visibility(onoff):
         code = os.popen('tput civis', 'r').read()
     sys.stdout.write(code)
     sys.stdout.flush()
+# }}}
 
 alternate_screen("on")
 cursor_visibility("off")
