@@ -7,6 +7,7 @@
 # Available zstyles. Given values are the defaults
 # zstyle ":morpho" screen-saver "zmorpho" # select screen-saver "zmorpho"; available: zmorpho, zmandelbrot, zblank, pmorpho
 #                                         # this  can also be a command, e.g. "cmatrix"
+# zstyle ":morpho" arguments "-s"         # arguments given to screen saver program; -s - every key press ends
 # zstyle ":morpho" delay "290"            # 5 minutes before screen-saver starts
 # zstyle ":morpho" check-interval "60"    # check every 1 minute if to run screen-saver
 
@@ -62,9 +63,10 @@ zstyle -s ':morpho' check-interval morpho_check_interval || morpho_check_interva
 
     if (( current_timestamp - active_timestamp > delay )); then
         # Load wanted screen saver
-        local screen_saver
+        local screen_saver args
         zstyle -s ':morpho' screen-saver screen_saver || screen_saver="zmorpho"
-        "$screen_saver"
+        zstyle -s ':morpho' arguments args || args="-s"
+        "$screen_saver" ${=args}
     fi
 
     sched +$morpho_check_interval -morpho-check-run-screen-saver
