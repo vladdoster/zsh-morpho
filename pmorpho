@@ -5,6 +5,8 @@ import math
 import sys
 import random
 import time
+import atexit
+import re
 
 # Old system state
 Ao = []
@@ -243,41 +245,73 @@ def morpho_render():
         sys.stdout.flush()
 # }}}
 
+# Alternate screen
+def alternate_screen(onoff):
+    if onoff == "on":
+        code = os.popen('tput smcup', 'r').read()
+    else:
+        code = os.popen('tput rmcup', 'r').read()
+
+    if code == "":
+        term = os.environ.get('TERM','unknown')
+        pattern = re.compile(".*rxvt.*")
+        if pattern.match(term):
+            if onoff == "on":
+                code = '\x1b7\x1b[?47h'
+            else:
+                code = '\x1b[2J\x1b[?47l\x1b8'
+        else:
+            if onoff == "on":
+                code = '\x1b[?1049h'
+            else:
+                code = '\x1b[?1049l'
+
+    sys.stdout.write(code)
+    sys.stdout.flush()
+
+alternate_screen("on")
+atexit.register(alternate_screen, 'off')
+
 #
 # Main code
 #
 
-# Main loop
-while True:
-    height_str, width_str = os.popen('stty size', 'r').read().split()
-    height=int(height_str)
-    width=int(width_str)
+try:
 
-    An = [0.0] * (width*height)
-    Bn = [0.0] * (width*height)
-    Ao = [0.0] * (width*height)
-    Bo = [0.0] * (width*height)
+    # Main loop
+    while True:
+        height_str, width_str = os.popen('stty size', 'r').read().split()
+        height=int(height_str)
+        width=int(width_str)
 
-    #
-    # Select configuration
-    #
+        An = [0.0] * (width*height)
+        Bn = [0.0] * (width*height)
+        Ao = [0.0] * (width*height)
+        Bo = [0.0] * (width*height)
 
-    crows = len(configs) / crowsize
-    crow = random.randint(1,crows)
-    cidx = (crow-1)*crowsize
+        #
+        # Select configuration
+        #
 
-    CA=configs[cidx]
-    CB=configs[cidx+1]
-    C_iter=configs[cidx+2]
-    C_imul=configs[cidx+3]
-    C_factor=configs[cidx+4]
-    C_smul=configs[cidx+5]
-    C_abboth=configs[cidx+6]
+        crows = len(configs) / crowsize
+        crow = random.randint(1,crows)
+        cidx = (crow-1)*crowsize
 
-    morpho_randomize()
-    morpho_solve()
-    morpho_render()
+        CA=configs[cidx]
+        CB=configs[cidx+1]
+        C_iter=configs[cidx+2]
+        C_imul=configs[cidx+3]
+        C_factor=configs[cidx+4]
+        C_smul=configs[cidx+5]
+        C_abboth=configs[cidx+6]
 
-    time.sleep(3)
+        morpho_randomize()
+        morpho_solve()
+        morpho_render()
+
+        time.sleep(3)
+
+except (KeyboardInterrupt, SystemExit):
+        raise
 
 # vim:ft=python
