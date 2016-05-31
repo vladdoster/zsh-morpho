@@ -20,9 +20,9 @@ trap "-morlib_end" EXIT
 redraw_delay=300
 
 # Main loop
-# Does nothing, the -morlib_begin
-# call already cleared the screen
 while (( 1 )); do
+    tput clear
+
     if [ "$SSAVER_MODE" = "1" ]; then
         -morlib_wait_for_any_key $redraw_delay && exit
     else
