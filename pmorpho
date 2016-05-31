@@ -322,6 +322,10 @@ try:
 
         morpho_randomize()
         morpho_solve()
+
+        code = os.popen('tput cup 0 0', 'r').read()
+        sys.stdout.write(code)
+
         morpho_render()
 
         time.sleep(3)
