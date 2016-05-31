@@ -276,9 +276,9 @@ morlib
 -morlib_begin
 trap "-morlib_end; exit" TERM INT QUIT
 trap "-morlib_end" EXIT
-integer redraw_delay
-zstyle -s ':morpho' redraw-delay redraw_delay || redraw_delay=300
 # End of standard screen saver before-loop block
+
+redraw_delay=300
 
 # Main loop
 while (( 1 )); do
