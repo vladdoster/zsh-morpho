@@ -137,9 +137,19 @@ float Bnext_x Bnext_y Bprev_x Bprev_y
     # Iterations
     for (( n=1; n<=C_iter; n ++ )); do
         # Screen saver mode - every key exits
-        [ "$SSAVER_MODE" = "1" ] && read -rs -k 1 -t && exit
+        [ "$SSAVER_MODE" = "1" ] && read -rs -k 1 -t && {
+            read -rs -k 1 -t
+            read -rs -k 1 -t
+            read -rs -k 1 -t
+            exit
+        }
         -morpho_solve_one_iteration
-        [ "$SSAVER_MODE" = "1" ] && read -rs -k 1 -t && exit
+        [ "$SSAVER_MODE" = "1" ] && read -rs -k 1 -t && {
+            read -rs -k 1 -t
+            read -rs -k 1 -t
+            read -rs -k 1 -t
+            exit
+        }
         -morpho_solve_one_iteration_reversed
     done
 }
