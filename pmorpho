@@ -26,7 +26,7 @@ tmp2 = 0.0
 # Configurations
 crowsize = 7
 configs=[ #CA#   #CB#    #iter.# #internal mul.#   #factor#  #smooth mul."   #a, b, both#
-          10.0,  23.39,  14,     0.005,            1.422,    0.3,            3,
+          10.0,  23.39,  14,     0.0084,            1.622,    0.3,            2,
           10.0,  23.39,  14,     0.0105,           1.422,    0.3,            3,
           10.0,  23.39,  14,     0.0105,           0.1422,   0.5,            2,
 ] 
@@ -292,6 +292,17 @@ atexit.register(cursor_visibility, 'on')
 #
 
 try:
+
+    #random.seed(4)
+    #random.seed(9)
+    #random.seed(10)
+    #random.seed(18)
+    #random.seed(35)
+    #random.seed(62)
+    #random.seed(76)
+    #random.seed(93)
+    #random.seed(192)
+    #random.seed(384)
 
     # Main loop
     while True:
