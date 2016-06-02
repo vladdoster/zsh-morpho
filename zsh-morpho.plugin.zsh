@@ -67,6 +67,9 @@ zstyle -s ':morpho' check-interval morpho_check_interval || morpho_check_interva
         zstyle -s ':morpho' screen-saver screen_saver || screen_saver="zmorpho"
         zstyle -s ':morpho' arguments args || args="-s"
         "$screen_saver" ${=args}
+
+        # Ending screen saver means user was active
+        -morpho-active
     fi
 
     sched +$morpho_check_interval -morpho-check-run-screen-saver
