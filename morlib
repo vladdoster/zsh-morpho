@@ -37,7 +37,13 @@ zmodload zsh/terminfo 2>/dev/null && _morlib_has_terminfo=1
 }
 
 -morlib_wait_for_any_key() {
-    read -rs -k 1 -t "$1"
+    integer count="$1"
+    count=2*count
+
+    while (( count -- )); do
+        LANG=C read -rs -k 1 -t 0.5
+        (( $? == 0 )) && break
+    done
 }
 
 -morlib_begin() {
