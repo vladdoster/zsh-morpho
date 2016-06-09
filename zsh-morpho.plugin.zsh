@@ -11,6 +11,11 @@
 # zstyle ":morpho" delay "290"            # 5 minutes before screen-saver starts
 # zstyle ":morpho" check-interval "60"    # check every 1 minute if to run screen-saver
 
+# This gives immunity to functionargzero being unset
+# _ will be set to last argument to source builtin
+PLUGIN_UNDERSCORE="$_"
+[ "$0" != "$PLUGIN_UNDERSCORE" ] && 0="$PLUGIN_UNDERSCORE"
+
 REPO_DIR="${0%/*}"
 
 #
