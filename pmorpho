@@ -339,7 +339,7 @@ try:
 
         morpho_render()
 
-        time.sleep(3)
+        time.sleep(5*60)
 
 except (KeyboardInterrupt, SystemExit):
         raise
