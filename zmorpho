@@ -137,14 +137,14 @@ float Bnext_x Bnext_y Bprev_x Bprev_y
     # Iterations
     for (( n=1; n<=C_iter; n ++ )); do
         # Screen saver mode - every key exits
-        [ "$SSAVER_MODE" = "1" ] && read -rs -k 1 -t && {
+        [[ "$SSAVER_MODE" = "1" ]] && read -rs -k 1 -t && {
             read -rs -k 1 -t
             read -rs -k 1 -t
             read -rs -k 1 -t
             exit
         }
         -morpho_solve_one_iteration
-        [ "$SSAVER_MODE" = "1" ] && read -rs -k 1 -t && {
+        [[ "$SSAVER_MODE" = "1" ]] && read -rs -k 1 -t && {
             read -rs -k 1 -t
             read -rs -k 1 -t
             read -rs -k 1 -t
@@ -165,18 +165,14 @@ float Bnext_x Bnext_y Bprev_x Bprev_y
     for (( i=1; i<=height; i ++ )); do
         for (( j=1; j<=width; j ++ )); do
             new1=$(( rand48() ))
-            if (( new1 > prev1 * C_factor )); then
-                new1=new1*C_smul
-            elif (( new1 < prev1 / C_factor )); then
-                new1=new1/C_smul
-            fi
+            (( new1 > prev1 * C_factor )) && new1=new1*C_smul || {
+                (( new1 < prev1 / C_factor )) && new1=new1/C_smul
+            }
 
             new2=$(( rand48() ))
-            if (( new2 > prev2 * C_factor )); then
-                new2=new2*C_smul
-            elif (( new2 < prev2 / C_factor )); then
-                new2=new2/C_smul
-            fi
+            (( new2 > prev2 * C_factor )) && new2=new2*C_smul || {
+                (( new2 < prev2 / C_factor )) && new2=new2/C_smul
+            }
 
             # Store into the array
             index=i*width+j
