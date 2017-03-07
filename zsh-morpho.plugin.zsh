@@ -15,6 +15,7 @@
 # _ will be set to last argument to source builtin
 PLUGIN_UNDERSCORE="$_"
 [ "$0" != "$PLUGIN_UNDERSCORE" ] && 0="$PLUGIN_UNDERSCORE"
+unset PLUGIN_UNDERSCORE
 
 REPO_DIR="${0%/*}"
 
