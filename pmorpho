@@ -74,13 +74,13 @@ Bprev_y = 0.0
 # One iteration on An, Bn
 # {{{
 def morpho_solve_one_iteration():
-    for i in xrange(0, height):
+    for i in range(0, height):
         i_add1=(i+1)%height
         i_sub1=i-1
         if i_sub1 < 0:
             i_sub1=height-1
 
-        for j in xrange(0, width):
+        for j in range(0, width):
             j_add1=(j+1)%width
             j_sub1=j-1
             if j_sub1 < 0:
@@ -118,13 +118,13 @@ def morpho_solve_one_iteration():
 # One iteration on Ao, Bo
 # {{{
 def morpho_solve_one_iteration_reversed():
-    for i in xrange(0, height):
+    for i in range(0, height):
         i_add1=(i+1)%height
         i_sub1=i-1
         if i_sub1 < 0:
             i_sub1=height-1
 
-        for j in xrange(0, width):
+        for j in range(0, width):
             j_add1=(j+1)%width
             j_sub1=j-1
             if j_sub1 < 0:
@@ -162,7 +162,7 @@ def morpho_solve_one_iteration_reversed():
 # {{{
 def morpho_solve():
     # Iterations
-    for n in xrange(0, C_iter):
+    for n in range(0, C_iter):
         morpho_solve_one_iteration()
         morpho_solve_one_iteration_reversed()
 # }}}
@@ -175,8 +175,8 @@ def morpho_randomize():
     new1 = 0.0
     new2 = 0.0
 
-    for i in xrange(0, height):
-        for j in xrange(0, width):
+    for i in range(0, height):
+        for j in range(0, width):
             new1 = random.uniform(0.0, 1.0)
             if new1 > prev1 * C_factor:
                 new1=new1*C_smul
@@ -204,8 +204,8 @@ def morpho_randomize():
 def morpho_render():
     # Get maximum average
     maxv = 0.0
-    for i in xrange(0, height):
-        for j in xrange(0, width):
+    for i in range(0, height):
+        for j in range(0, width):
             index=i*width+j
             if C_abboth == 1:
                 tmp1=Ao[index]
@@ -222,8 +222,8 @@ def morpho_render():
             if maxv < tmp1:
                 maxv = tmp1
 
-    for i in xrange(0, height):
-        for j in xrange(0, width):
+    for i in range(0, height):
+        for j in range(0, width):
             index=i*width+j
             if C_abboth == 1:
                 tmp1=Ao[index]
