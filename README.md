@@ -1,12 +1,10 @@
 ## Introduction
 
-Terminal screen saver for Zshell. Implements morphogenesis and Mandelbrot
-images. Written in pure Zshell (possible thanks to floating point numbers
-and to `zsh/mathfunc` module). Supports running external commands, for
-example `cmatrix`.
+Terminal screen saver for Zshell. Implements morphogenesis and Mandelbrot images. Written in pure Zshell (possible
+thanks to floating point numbers and to `zsh/mathfunc` module). Supports running external commands, for example
+`cmatrix`.
 
-Screen saver will start after configured time, in last terminal in which
-a command has been executed.
+Screen saver will start after configured time, in last terminal in which a command has been executed.
 
 Video – view on [asciinema](https://asciinema.org/a/47242). You can resize the video by pressing `Ctrl-+` or `Cmd-+`.
 
@@ -28,32 +26,28 @@ To test screen savers run them directly from command line, e.g. issue "`pmorpho`
 
 ## Installation
 
-The plugin is "standalone", which means that only sourcing it is needed. So to
-install, unpack `zsh-morpho` somewhere and add
-`source {where-zsh-morpho-is}/zsh-morpho.plugin.zsh` to `zshrc`.
+The plugin is "standalone", which means that only sourcing it is needed. So to install, unpack `zsh-morpho` somewhere
+and add `source {where-zsh-morpho-is}/zsh-morpho.plugin.zsh` to `zshrc`.
 
-If using a plugin manager, then `Zinit` is recommended, but you can use any
-other too, and also install with `Oh My Zsh` (by copying directory to
-`~/.oh-my-zsh/custom/plugins`).
+If using a plugin manager, then `Zinit` is recommended, but you can use any other too, and also install with `Oh My Zsh`
+(by copying directory to `~/.oh-my-zsh/custom/plugins`).
 
 ### [Zinit](https://github.com/zdharma-continuum/zinit)
 
-Add `zinit load zdharma-continuum/zsh-morpho` to `.zshrc`.
-The plugin will be loaded next time you start `Zsh`.
-To update issue `zinit update zdharma-continuum/zsh-morpho` from command line.
+Add `zinit load zdharma-continuum/zsh-morpho` to `.zshrc`. The plugin will be loaded next time you start `Zsh`. To
+update issue `zinit update zdharma-continuum/zsh-morpho` from command line.
 
 ### Zgen
 
-Add `zgen load zdharma-continuum/zsh-morpho` to `.zshrc` and issue a `zgen reset` (this
-assumes that there is a proper `zgen save` construct in `.zshrc`).
+Add `zgen load zdharma-continuum/zsh-morpho` to `.zshrc` and issue a `zgen reset` (this assumes that there is a proper
+`zgen save` construct in `.zshrc`).
 
 ### Antigen
 
-Add `antigen bundle zdharma-continuum/zsh-morpho` to `.zshrc`. There also should be
-`antigen apply`.
+Add `antigen bundle zdharma-continuum/zsh-morpho` to `.zshrc`. There also should be `antigen apply`.
 
 ### Oh-My-Zsh
 
 1. `cd ~/.oh-my-zsh/custom/plugins`
-2. `git clone https://github.com/zdharma-continuum/zsh-morpho.git`
-3. Add `zsh-morpho` to your plugin list
+1. `git clone https://github.com/zdharma-continuum/zsh-morpho.git`
+1. Add `zsh-morpho` to your plugin list
